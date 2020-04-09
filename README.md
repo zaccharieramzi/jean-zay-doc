@@ -14,6 +14,11 @@ could be improved, open an
 [issue](https://github.com/jean-zay-users/jean-zay-doc/issues/new) or even
 better a [Pull Request (PR)](https://github.com/jean-zay-users/jean-zay-doc/compare)!**
 
+We use gitter for chat, don't hesitate to get involved
+[there](https://gitter.im/jean-zay-users/jean-zay-doc) and ask questions!
+
+[![Gitter](https://img.shields.io/gitter/room/jean-zay-users/jean-zay-doc.svg)](https://gitter.im/jean-zay-users/jean-zay-doc)
+
 # Content
 
 - [Access procedure](./access-procedure.md). The access procedure for Jean Zay
@@ -22,6 +27,8 @@ better a [Pull Request (PR)](https://github.com/jean-zay-users/jean-zay-doc/comp
   it.
 - [Tips and tricks](./tips-and-tricks.md)
 - [Limitations](./limitations.md)
+- Example scripts: [PyTorch examples](./examples/pytorch) and [Tensorflow
+  examples](./examples/tf).
 
 In the medium term, more material could be added to discuss tips and tricks,
 limitations, work-arounds, etc ... on Jean Zay. In particular, feel free to
@@ -39,7 +46,7 @@ the Jean Zay cluster, e.g.:
 
 # Useful links
 
-Jean Zay doc for AI users (French only for now): http://www.idris.fr/ai/
+Jean Zay doc for AI users (French only for now): http://www.idris.fr/ia
 
 Hardware: http://www.idris.fr/eng/jean-zay/cpu/jean-zay-cpu-hw-eng.html
 
@@ -48,6 +55,8 @@ Doc: http://www.idris.fr/eng/jean-zay/
 Doc in French (more accurate sometimes): http://www.idris.fr/jean-zay/
 
 Email for Jean Zay user support: [assist@idris.fr](mailto:assist@idris.fr).
+
+Gitter chat: [https://gitter.im/jean-zay-users/jean-zay-doc](https://gitter.im/jean-zay-users/jean-zay-doc)
 
 # Generic advice
 

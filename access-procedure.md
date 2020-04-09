@@ -14,22 +14,29 @@ security checks). It does seem long but it is definitely worth it.
 
 Here we will focus on the easiest procedure to access Jean Zay, namely the
 "Accès dynamique" one. This procedure only applies if your research is around
-developing AI algorithms.
+developing AI algorithms. Here is a quick overview of the procedure. Each step
+is detailed in the sections below.
 
-- Create an [EDARI account](https://www.edari.fr/user/register) (simple
-  personal details).
-- Fill a form about your project ("Déclaration de dossier"). Hardest part is to
-  figure out who your "Directeur de la structure de recherche" is and to have
-  the form signed by him/her. You also need to write a few lines about your
-  project.
-- Fill a form about to get a computing account ("Déclaration de compte
-  calcul"). Hardest part is to figure out who your "Responsable Sécurité
-  informatique" is and have the form signed by him/her as well as the
-  "Directeur de la structure de recherche". You also need to declare one (or
-  more) IP address(es) that will be able to use to connect to Jean Zay.
-- After roughly a week, you'll get an email from IDRIS giving you your login,
-  password and instructions to connect to Jean Zay.
-- After roughly 2 days, you should be able to connect to Jean Zay.
+1. Create an [EDARI account](https://www.edari.fr/user/register) (simple
+   personal details). See [this](#edari-account-administrative-account)
+   for all the details about this step.
+2. Fill a form about your project (**"Déclaration de dossier"**). Hardest part is
+   to figure out who your "Directeur de la structure de recherche" is and to
+   have the form signed by him/her. You also need to write a few lines about
+   your project. See [this](#d%C3%A9claration-de-dossier-project-description)
+   for all the details about this step.
+3. Fill a form about to get a computing account (**"Déclaration de compte
+   calcul"**). Hardest part is to figure out who your "Responsable Sécurité
+   informatique" is and have the form signed by him/her as well as the
+   "Directeur de la structure de recherche". You also need to declare one (or
+   more) IP address(es) that will be able to use to connect to Jean Zay. See
+   [this](#d%C3%A9claration-de-compte-calcul-computing-account-creation-for-jean-zay)
+   for all the details about this step.
+4. After roughly a week, you'll get an email from IDRIS giving you your login,
+   password and instructions to connect to Jean Zay. See
+   [this](#idris-email-with-login-and-password) for all the details about this
+   step.
+5. After roughly 2 days, you should be able to connect to Jean Zay.
 
 ## EDARI account (administrative account)
 
@@ -60,10 +67,18 @@ Important details:
 - As long as you ask for <= 10000 GPU hours (~400 days on a single GPU) and
   less than 48 GPUs simultaneously (4 GPUs on 12 nodes) it should go through
   easily (see https://www.edari.fr/voirlappel56).
-- Project description : no need to spend too much time on this, 5 lines should
-  be plenty enough if you ask for less than 10000 GPU hours.
-- Note that in principle once your 10000 GPU hours are exhausted you can ask for
-  a renewal through a similar "lightweight" procedure.
+- Project description : no need to spend too much time on this, 3-5 lines
+  should be plenty enough if you ask for less than 10000 GPU hours.
+
+When you finish filling out this part, you should something like this:
+<img src="./img/project-saved.png" width="60%" style="display: block"/>
+
+**Important**: you need to click on "Valider la saisie des informations" to
+validate your information:
+<img src="./img/project-validate.png" width="60%" style="display: block"/>
+
+Note that in principle once your 10000 GPU hours are exhausted you can ask for
+a renewal through a similar "lightweight" procedure.
 
 ## "Déclaration de compte calcul" (computing account creation for Jean Zay)
 
@@ -81,6 +96,40 @@ Important details:
   lab will have a static IP address, but best confirm with your local IT
   people. Note that the form is helping you with some suggestion which were
   correct when filling it from a fixed desktop in our lab.
+
+When you finish filling out this part, you should see something like this:
+<img src="./img/computing-account-saved.png" width="60%" style="display: block"/>
+
+**Important**: you need to click on "Valider la saisie des informations" to
+validate your information:
+<img src="./img/computing-account-validate.png" width="60%" style="display: block"/>
+
+
+## Optional (skip this if you are French)
+
+The direction of IDRIS will most likely require an additional security
+authorization. You will have to fill a form with basic information about
+yourself (name, address, date and place of birth) and about the project you
+will be working on: where you will be working from, where your financing comes
+from (e.g. Inria, a project grant, etc ...), and a description of your project.
+
+The project description comes in two parts:
+- A short description (can be the same as the one used in your declaration on
+  Edari) embedded in the form you will receive.
+- A more detailed description to attach in PDF. A one-page file with half
+  description / half bibliography should be enough. You will also be asked to
+  attach a CV. It must include everything you did after you obtained your last
+  degree. Every blank should be explicitly stated. For example, if you had a
+  one month break, you should specify this month on your CV and state « No
+  employment » next to it.
+
+After everything is submitted, you should receive an e-mail saying it will take
+between 1 and 2 months (In practice it took 2.5 months). Do not hesitate to
+send them an email if you don't here from them maybe after 1 month the first
+time, and then every two weeks until you manage to get through the security
+background checks (fix this part if you have better recommendations).
+
+Once this step is complete, the regular procedure applies.
 
 ## IDRIS email with login and password
 
