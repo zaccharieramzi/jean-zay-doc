@@ -11,17 +11,16 @@
 #SBATCH --error=fastmri_tf_distr_log_%j.out   # std err
 #SBATCH --exclusive                 # we reserve the entire node for our job
 #SBATCH --qos=qos_gpu-dev         # we are submitting a test job
-#SBATCH -A changeme@gpu
 
-
-set -x
-module purge
-cd $WORK/submission-scripts/jean-zay/env_configs/
-. fastmri4.sh
 
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 
-
+set -x
 cd ${SLURM_SUBMIT_DIR}
+
+module purge
+module load tensorflow-gpu/py3/2.4.0
+export FASTMRI_DATA_DIR=$SCRATCH/
+export SINGLECOIL_TRAIN_DIR=singlecoil_train/singlecoil_train
 
 srun python ./fastmri_example.py
