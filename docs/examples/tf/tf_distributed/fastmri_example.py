@@ -29,7 +29,7 @@ def train_dense_model(batch_size):
             kspace, mask = inputs
             image = self.ifft(kspace)
             image = general_fastmri_format(image)
-            tf.debugging.assert_shapes([(image, (1, 320, 320, 1))], data=tf.shape(images))
+            tf.debugging.assert_shapes([(image, (1, 320, 320, 1))], data=tf.shape(image))
             image = self.conv(image)
             return image
 
