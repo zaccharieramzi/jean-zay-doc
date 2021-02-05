@@ -21,7 +21,7 @@ def train_dense_model(batch_size):
                 super().__init__(**kwargs)
                 self.dense1 = layers.Dense(64, activation='relu')
                 self.dense2 = layers.Dense(64, activation='relu')
-                self.dense3 = layers.Dense(10)(x)
+                self.dense3 = layers.Dense(10)
 
             def call(self, inputs):
                 outputs = self.dense1(inputs)
