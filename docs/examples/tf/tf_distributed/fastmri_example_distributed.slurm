@@ -16,9 +16,9 @@
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 
 set -x
-cd ${SLURM_SUBMIT_DIR}
+cd $WORK/submission-script/jean-zay/env_configs/
+. fastmri4.sh
 
-module purge
-module load tensorflow-gpu/py3/2.4.0
+cd ${SLURM_SUBMIT_DIR}
 
 srun python ./fastmri_example.py
