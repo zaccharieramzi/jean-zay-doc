@@ -48,10 +48,10 @@ def train_dense_model(batch_size):
 
     # training and inference
     x_train = (
-        tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
-        tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
+        tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
+        tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
     )
-    y_train = tf.random.normal([16*10, 320, 320, 1])
+    y_train = tf.random.normal([16*50, 320, 320, 1])
     ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
     # path = Path(FASTMRI_DATA_DIR) / 'singlecoil_train' / 'singlecoil_train'
     # ds = train_masked_kspace_dataset_from_indexable(
@@ -62,7 +62,7 @@ def train_dense_model(batch_size):
     # )
 
 
-    history = model.fit(ds, steps_per_epoch=10, epochs=2,)
+    history = model.fit(ds, steps_per_epoch=50, epochs=2,)
     return True
 
 if __name__ == '__main__':
