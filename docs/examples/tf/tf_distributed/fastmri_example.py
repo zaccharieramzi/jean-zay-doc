@@ -4,7 +4,7 @@ import click
 
 @click.command()
 def train_dense_model_click():
-    return train_dense_model(batch_size=64)
+    return train_dense_model(batch_size=16)
 
 
 def train_dense_model(batch_size):
@@ -13,47 +13,44 @@ def train_dense_model(batch_size):
     import tensorflow as tf
     from tensorflow import keras
     from tensorflow.keras import layers
+
+    from fastmri_recon.models.utils.fourier import IFFT
+    from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
     # model building
     tf.keras.backend.clear_session()  # For easy reset of notebook state.
 
     class MyModel(keras.models.Model):
             def __init__(self, **kwargs):
                 super().__init__(**kwargs)
-                self.dense1 = layers.Dense(64, activation='relu')
-                self.dense2 = layers.Dense(64, activation='relu')
-                self.dense3 = layers.Dense(10)
+                self.conv = layers.Conv2D(1, 3, padding='same')
+                self.ifft = IFFT(False)
 
             def call(self, inputs):
-                outputs = self.dense1(inputs)
-                outputs = self.dense2(outputs)
-                outputs = self.dense3(outputs)
-                return outputs
+                kspace, mask = inputs
+                image = self.ifft(kspace)
+                image = self.conv(image)
+                image = general_fastmri_format(image)
+                return image
 
     slurm_resolver = tf.distribute.cluster_resolver.SlurmClusterResolver(port_base=15000)
     mirrored_strategy = tf.distribute.MultiWorkerMirroredStrategy(cluster_resolver=slurm_resolver)
     print('Number of replicas:', mirrored_strategy.num_replicas_in_sync)
     with mirrored_strategy.scope():
-        model = MyModel(name='mnist_model')
+        model = MyModel(name='fastmri_model')
 
-        model.compile(loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                      optimizer=keras.optimizers.RMSprop(),
-                      metrics=['accuracy'])
+        model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
 
     # training and inference
     # network is not reachable, so we use random data
-    x_train = tf.random.normal((60000, 784), dtype='float32')
-    x_test = tf.random.normal((10000, 784), dtype='float32')
-    y_train = tf.random.uniform((60000,), minval=0, maxval=10, dtype='int32')
-    y_test = tf.random.uniform((10000,), minval=0, maxval=10, dtype='int32')
-
+    x_train = [
+        tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
+        tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
+    ]
+    y_train = tf.random.normal([16*10, 320, 320, 1])
 
     history = model.fit(x_train, y_train,
                         batch_size=batch_size,
-                        epochs=5,
-                        validation_split=0.2)
-    test_scores = model.evaluate(x_test, y_test, verbose=2)
-    print('Test loss:', test_scores[0])
-    print('Test accuracy:', test_scores[1])
+                        epochs=2,)
     return True
 
 if __name__ == '__main__':
