@@ -47,19 +47,19 @@ def train_dense_model(batch_size):
         model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
 
     # training and inference
-    x_train = (
-        tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
-        tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
-    )
-    y_train = tf.random.normal([16*50, 320, 320, 1])
-    ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
-    # path = Path(FASTMRI_DATA_DIR) / 'singlecoil_train' / 'singlecoil_train'
-    # ds = train_masked_kspace_dataset_from_indexable(
-    #     str(path) + '/',
-    #     rand=True,
-    #     batch_size=16,
-    #     target_image_size=(640, 400),
+    # x_train = (
+    #     tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
+    #     tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
     # )
+    # y_train = tf.random.normal([16*50, 320, 320, 1])
+    # ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+    path = Path(FASTMRI_DATA_DIR) / 'singlecoil_train' / 'singlecoil_train'
+    ds = train_masked_kspace_dataset_from_indexable(
+        str(path) + '/',
+        rand=True,
+        batch_size=16,
+        target_image_size=(640, 400),
+    )
 
 
     history = model.fit(ds, steps_per_epoch=50, epochs=2,)
