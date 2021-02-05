@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=mnist_tf_distributed     # job name
+#SBATCH --job-name=fastmri_tf_distributed     # job name
 #SBATCH --nodes=2                 # number of nodes
 #SBATCH --ntasks-per-node=1         # number of MPI task per node
 #SBATCH --gres=gpu:4                # number of GPUs per node
