@@ -7,8 +7,8 @@
 #SBATCH --hint=nomultithread         # we get physical cores not logical
 #SBATCH --distribution=block:block  # distribution, might be better to have contiguous blocks
 #SBATCH --time=00:10:00             # job length
-#SBATCH --output=mnist_tf_distr_log_%j.out  # std out
-#SBATCH --error=mnist_tf_distr_log_%j.out   # std err
+#SBATCH --output=fastmri_tf_distr_log_%j.out  # std out
+#SBATCH --error=fastmri_tf_distr_log_%j.out   # std err
 #SBATCH --exclusive                 # we reserve the entire node for our job
 #SBATCH --qos=qos_gpu-dev         # we are submitting a test job
 #SBATCH -A changeme@gpu
