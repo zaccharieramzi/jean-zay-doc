@@ -28,9 +28,8 @@ def train_dense_model(batch_size):
         def call(self, inputs):
             kspace, mask = inputs
             image = self.ifft(kspace)
-            image = tf.abs(image)
-            image = self.conv(image)
             image = general_fastmri_format(image)
+            image = self.conv(image)
             return image
 
     slurm_resolver = tf.distribute.cluster_resolver.SlurmClusterResolver(port_base=15000)
