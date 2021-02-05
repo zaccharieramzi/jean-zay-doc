@@ -20,17 +20,18 @@ def train_dense_model(batch_size):
     tf.keras.backend.clear_session()  # For easy reset of notebook state.
 
     class MyModel(keras.models.Model):
-            def __init__(self, **kwargs):
-                super().__init__(**kwargs)
-                self.conv = layers.Conv2D(1, 3, padding='same')
-                self.ifft = IFFT(False)
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.conv = layers.Conv2D(1, 3, padding='same')
+            self.ifft = IFFT(False)
 
-            def call(self, inputs):
-                kspace, mask = inputs
-                image = self.ifft(kspace)
-                image = self.conv(image)
-                image = general_fastmri_format(image)
-                return image
+        def call(self, inputs):
+            kspace, mask = inputs
+            image = self.ifft(kspace)
+            image = tf.abs(image)
+            image = self.conv(image)
+            image = general_fastmri_format(image)
+            return image
 
     slurm_resolver = tf.distribute.cluster_resolver.SlurmClusterResolver(port_base=15000)
     mirrored_strategy = tf.distribute.MultiWorkerMirroredStrategy(cluster_resolver=slurm_resolver)
@@ -41,7 +42,6 @@ def train_dense_model(batch_size):
         model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
 
     # training and inference
-    # network is not reachable, so we use random data
     x_train = [
         tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
         tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
