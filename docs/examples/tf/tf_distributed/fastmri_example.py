@@ -41,11 +41,12 @@ def train_dense_model(batch_size):
         model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
 
     # training and inference
-    x_train = [
+    x_train = (
         tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
         tf.cast(tf.random.normal([16*10, 320, 320, 1]), tf.complex64),
-    ]
+    )
     y_train = tf.random.normal([16*10, 320, 320, 1])
+    ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat()
 
     history = model.fit(x_train, y_train,
                         batch_size=batch_size,
