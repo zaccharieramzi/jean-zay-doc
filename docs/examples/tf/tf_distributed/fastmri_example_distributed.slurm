@@ -13,12 +13,14 @@
 #SBATCH --qos=qos_gpu-dev         # we are submitting a test job
 #SBATCH -A changeme@gpu
 
-unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 
 set -x
 module purge
 cd $WORK/submission-scripts/jean-zay/env_configs/
 . fastmri4.sh
+
+unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
+
 
 cd ${SLURM_SUBMIT_DIR}
 
