@@ -16,7 +16,7 @@
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 
 set -x
-cd $WORK/submission-script/jean-zay/env_configs/
+cd $WORK/submission-scripts/jean-zay/env_configs/
 . fastmri4.sh
 
 cd ${SLURM_SUBMIT_DIR}
