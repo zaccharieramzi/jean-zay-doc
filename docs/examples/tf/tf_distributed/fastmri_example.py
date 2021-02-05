@@ -59,6 +59,7 @@ def train_dense_model(batch_size):
         rand=True,
         batch_size=16,
         target_image_size=(640, 400),
+        parallel=False,
     )
 
 
