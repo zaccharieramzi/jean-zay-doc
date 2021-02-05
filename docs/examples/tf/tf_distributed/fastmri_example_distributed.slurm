@@ -16,6 +16,7 @@
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 
 set -x
+module purge
 cd $WORK/submission-scripts/jean-zay/env_configs/
 . fastmri4.sh
 
