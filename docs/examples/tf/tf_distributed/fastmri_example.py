@@ -17,7 +17,7 @@ def train_dense_model(batch_size):
     from tensorflow.keras import layers
 
     from fastmri_recon.config import FASTMRI_DATA_DIR
-    from fastmri_recon.data.datasets.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
+    from fastmri_recon.data.datasets.multicoil.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
     from fastmri_recon.models.utils.fourier import IFFT
     from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
     # model building
@@ -27,11 +27,11 @@ def train_dense_model(batch_size):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.conv = layers.Conv2D(1, 3, padding='same')
-            self.ifft = IFFT(False)
+            self.ifft = IFFT(False, multicoil=True)
 
         def call(self, inputs):
-            kspace, mask = inputs
-            image = self.ifft(kspace)
+            kspace, mask, smaps = inputs
+            image = self.ifft([kspace, smaps])
             image = general_fastmri_format(image)
             # to check that splitting happens correctly
             tf.print(tf.shape(image))
@@ -53,7 +53,7 @@ def train_dense_model(batch_size):
     # )
     # y_train = tf.random.normal([16*50, 320, 320, 1])
     # ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
-    path = Path(FASTMRI_DATA_DIR) / 'singlecoil_train' / 'singlecoil_train'
+    path = Path(FASTMRI_DATA_DIR) / 'multicoil_train'
     ds = train_masked_kspace_dataset_from_indexable(
         str(path) + '/',
         rand=True,
