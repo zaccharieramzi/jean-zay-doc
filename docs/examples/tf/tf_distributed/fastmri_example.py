@@ -10,10 +10,14 @@ def train_dense_model_click():
 def train_dense_model(batch_size):
     # limit imports oustide the call to the function, in order to launch quickly
     # when using dask
+    from pathlib import Path
+
     import tensorflow as tf
     from tensorflow import keras
     from tensorflow.keras import layers
 
+    from fastmri_recon.config import FASTMRI_DATA_DIR
+    from fastmri_recon.data.datasets.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
     from fastmri_recon.models.utils.fourier import IFFT
     from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
     # model building
@@ -29,6 +33,7 @@ def train_dense_model(batch_size):
             kspace, mask = inputs
             image = self.ifft(kspace)
             image = general_fastmri_format(image)
+            # to check that splitting happens correctly
             tf.print(tf.shape(image))
             image = self.conv(image)
             return image
@@ -48,10 +53,16 @@ def train_dense_model(batch_size):
     )
     y_train = tf.random.normal([16*10, 320, 320, 1])
     ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat()
+    # path = Path(FASTMRI_DATA_DIR) / 'singlecoil_train' / 'singlecoil_train'
+    # ds = train_masked_kspace_dataset_from_indexable(
+    #     str(path) + '/',
+    #     rand=True,
+    #     batch_size=16,
+    #     target_image_size=(640, 400),
+    # )
 
-    history = model.fit(x_train, y_train,
-                        batch_size=batch_size,
-                        epochs=2,)
+
+    history = model.fit(ds, steps_per_epoch=10, epochs=2,)
     return True
 
 if __name__ == '__main__':
