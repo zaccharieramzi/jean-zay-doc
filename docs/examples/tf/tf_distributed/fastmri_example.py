@@ -54,14 +54,21 @@ def train_dense_model(batch_size):
     # y_train = tf.random.normal([16*50, 320, 320, 1])
     # ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
     path = Path(FASTMRI_DATA_DIR) / 'multicoil_train'
-    ds = train_masked_kspace_dataset_from_indexable(
-        str(path) + '/',
-        rand=True,
-        batch_size=16,
-        target_image_size=(640, 400),
-        parallel=False,
-    )
-
+    def _dataset_fn(input_context):
+            ds = dataset(
+                str(path) + '/',
+                input_context=input_context,
+                inner_slices=None,
+                rand=True,
+                scale_factor=1e6,
+                batch_size=16,
+                target_image_size=(640, 400),
+            )
+            options = tf.data.Options()
+            options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.DATA
+            ds = ds.with_options(options)
+            return ds
+    ds = mirrored_strategy.distribute_datasets_from_function(_dataset_fn)
 
     history = model.fit(ds, steps_per_epoch=50, epochs=2,)
     return True
