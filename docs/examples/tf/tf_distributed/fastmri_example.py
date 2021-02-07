@@ -63,6 +63,7 @@ def train_dense_model(batch_size):
                 scale_factor=1e6,
                 batch_size=16,
                 target_image_size=(640, 400),
+                parallel=False,
             )
             options = tf.data.Options()
             options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.DATA
