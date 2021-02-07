@@ -61,7 +61,7 @@ def train_dense_model(batch_size):
                 inner_slices=None,
                 rand=True,
                 scale_factor=1e6,
-                batch_size=16,
+                batch_size=16 // input_context.num_input_pipelines,
                 target_image_size=(640, 400),
                 parallel=False,
             )
