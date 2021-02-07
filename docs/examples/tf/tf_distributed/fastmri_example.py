@@ -55,7 +55,7 @@ def train_dense_model(batch_size):
     # ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
     path = Path(FASTMRI_DATA_DIR) / 'multicoil_train'
     def _dataset_fn(input_context):
-            ds = dataset(
+            ds = train_masked_kspace_dataset_from_indexable(
                 str(path) + '/',
                 input_context=input_context,
                 inner_slices=None,
