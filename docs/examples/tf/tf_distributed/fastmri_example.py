@@ -1,5 +1,14 @@
 # all taken from https://www.tensorflow.org/guide/keras/functional
 import click
+from tensorflow.keras.callbacks import ModelCheckpoint
+
+# taken from https://github.com/tensorflow/tensorflow/issues/39679
+class ModelCheckpointWorkAround(ModelCheckpoint):
+    def set_model(self, model):
+        # Work around, so that the if at
+        # https://github.com/tensorflow/tensorflow/blob/1186e3f2098793952aa82bf356dfe51b967fb26c/tensorflow/python/keras/callbacks.py#L1189
+        # is skipped, so that self.save_weights_only remains False.
+        self.model = model
 
 
 @click.command()
@@ -16,7 +25,7 @@ def train_dense_model(batch_size):
     from tensorflow import keras
     from tensorflow.keras import layers
 
-    from fastmri_recon.config import FASTMRI_DATA_DIR
+    from fastmri_recon.config import FASTMRI_DATA_DIR, CHECKPOINTS_DIR, TMP_DIR
     from fastmri_recon.data.datasets.multicoil.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
     from fastmri_recon.models.utils.fourier import IFFT
     from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
@@ -70,8 +79,16 @@ def train_dense_model(batch_size):
             ds = ds.with_options(options)
             return ds
     ds = mirrored_strategy.distribute_datasets_from_function(_dataset_fn)
-    print(slurm_resolver.task_id == 0)
-    history = model.fit(ds, steps_per_epoch=50, epochs=2,)
+    if slurm_resolver.task_id == 0:
+        chkpt_path = f'{CHECKPOINTS_DIR}test_checkpoints/test' + '-{epoch:02d}'
+    else:
+        chkpt_path = f'{TMP_DIR}test_checkpoints/test' + '-{epoch:02d}'
+    chkpt_cback = ModelCheckpointWorkAround(
+        chkpt_path,
+        save_freq=100,
+        save_weights_only=False,
+    )
+    history = model.fit(ds, steps_per_epoch=50, epochs=2, callbacs=[chkpt_cback])
     return True
 
 if __name__ == '__main__':
