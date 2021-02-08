@@ -88,7 +88,7 @@ def train_dense_model(batch_size):
         save_freq=100,
         save_weights_only=False,
     )
-    history = model.fit(ds, steps_per_epoch=50, epochs=2, callbacs=[chkpt_cback])
+    history = model.fit(ds, steps_per_epoch=50, epochs=2, callbacks=[chkpt_cback])
     return True
 
 if __name__ == '__main__':
