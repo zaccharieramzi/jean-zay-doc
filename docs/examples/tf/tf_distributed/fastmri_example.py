@@ -70,7 +70,7 @@ def train_dense_model(batch_size):
             ds = ds.with_options(options)
             return ds
     ds = mirrored_strategy.distribute_datasets_from_function(_dataset_fn)
-
+    print(slurm_resolver.task_id == 0)
     history = model.fit(ds, steps_per_epoch=50, epochs=2,)
     return True
 
