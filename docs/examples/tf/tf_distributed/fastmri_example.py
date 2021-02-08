@@ -79,10 +79,7 @@ def train_dense_model(batch_size):
     #         ds = ds.with_options(options)
     #         return ds
     # ds = mirrored_strategy.distribute_datasets_from_function(_dataset_fn)
-    if slurm_resolver.task_id == 0:
-        chkpt_path = f'{CHECKPOINTS_DIR}test_checkpoints/test' + '-{epoch:02d}'
-    else:
-        chkpt_path = f'{TMP_DIR}test_checkpoints/test' + '-{epoch:02d}'
+    chkpt_path = f'{CHECKPOINTS_DIR}test_checkpoints/test' + '-{epoch:02d}'
     chkpt_cback = ModelCheckpointWorkAround(
         chkpt_path,
         save_freq=100,
