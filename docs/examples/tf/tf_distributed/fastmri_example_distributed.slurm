@@ -21,6 +21,8 @@ cd ${SLURM_SUBMIT_DIR}
 module purge
 module load tensorflow-gpu/py3/2.4.0
 export FASTMRI_DATA_DIR=$SCRATCH/
+export CHECKPOINTS_DIR=$SCRATCH/
+export TMP_DIR=$JOBSCRATCH/
 export SINGLECOIL_TRAIN_DIR=singlecoil_train/singlecoil_train
 
 srun python ./fastmri_example.py
