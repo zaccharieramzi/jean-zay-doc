@@ -36,11 +36,11 @@ def train_dense_model(batch_size):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.conv = layers.Conv2D(1, 3, padding='same')
-            self.ifft = IFFT(False, multicoil=True)
+            self.ifft = IFFT(False)
 
         def call(self, inputs):
-            kspace, mask, smaps = inputs
-            image = self.ifft([kspace, smaps])
+            kspace, mask = inputs
+            image = self.ifft(kspace)
             image = general_fastmri_format(image)
             # to check that splitting happens correctly
             tf.print(tf.shape(image))
