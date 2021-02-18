@@ -24,34 +24,48 @@ def train_dense_model(batch_size):
     import tensorflow as tf
     from tensorflow import keras
     from tensorflow.keras import layers
+    from tensorflow.keras.mixed_precision import experimental as mixed_precision
 
     from fastmri_recon.config import FASTMRI_DATA_DIR, CHECKPOINTS_DIR, TMP_DIR
     from fastmri_recon.data.datasets.multicoil.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
+    from fastmri_recon.models.subclassed_models.denoisers.proposed_params import get_model_specs
+    from fastmri_recon.models.subclassed_models.xpdnet import XPDNet
     from fastmri_recon.models.utils.fourier import IFFT
     from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
     # model building
     tf.keras.backend.clear_session()  # For easy reset of notebook state.
 
-    class MyModel(keras.models.Model):
-        def __init__(self, **kwargs):
-            super().__init__(**kwargs)
-            self.conv = layers.Conv2D(1, 3, padding='same')
-            self.ifft = IFFT(False)
-
-        def call(self, inputs):
-            kspace, mask = inputs
-            image = self.ifft(kspace)
-            image = general_fastmri_format(image)
-            # to check that splitting happens correctly
-            tf.print(tf.shape(image))
-            image = self.conv(image)
-            return image
+    policy = mixed_precision.Policy('mixed_float16')
+    mixed_precision.set_policy(policy)
 
     slurm_resolver = tf.distribute.cluster_resolver.SlurmClusterResolver(port_base=15000)
     mirrored_strategy = tf.distribute.MultiWorkerMirroredStrategy(cluster_resolver=slurm_resolver)
     print('Number of replicas:', mirrored_strategy.num_replicas_in_sync)
+
+    run_params = {
+        'n_primal': 5,
+        'multicoil': False,
+        'n_scales': 4,
+        'n_iter': 1,
+        'refine_smaps': False,
+        'res': True,
+        'output_shape_spec': False,
+        'multi_gpu': False,
+        'refine_big': False,
+        'primal_only': True,
+        'n_dual': 1,
+        'n_dual_filters': 8,
+        'multiscale_kspace_learning': False,
+    }
+    n_primal = 5
+    model_fun, model_kwargs, n_scales, res = [
+         (model_fun, kwargs, n_scales, res)
+         for m_name, m_size, model_fun, kwargs, _, n_scales, res in get_model_specs(n_primal=n_primal, force_res=False)
+         if m_name == 'MWCNN' and m_size == 'small'
+    ][0]
+
     with mirrored_strategy.scope():
-        model = MyModel(name='fastmri_model')
+        model = XPDNet(model_fun, model_kwargs, **run_params)
 
         model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
 
