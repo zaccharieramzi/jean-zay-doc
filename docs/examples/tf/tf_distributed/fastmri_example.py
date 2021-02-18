@@ -72,7 +72,7 @@ def train_dense_model(batch_size):
     # training and inference
     x_train = (
         tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
-        tf.cast(tf.random.normal([16*50, 320, 320, 1]), tf.complex64),
+        tf.cast(tf.random.normal([16*50, 320, 320]), tf.complex64),
     )
     y_train = tf.random.normal([16*50, 320, 320, 1])
     ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
