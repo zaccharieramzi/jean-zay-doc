@@ -76,7 +76,7 @@ def train_dense_model(batch_size):
         tf.cast(tf.random.normal([16*2, 15, 320, 320]), tf.complex64),
     )
     y_train = tf.random.normal([16*2, 320, 320, 1])
-    ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+    ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16).repeat().prefetch(buffer_size=1)
     # path = Path(FASTMRI_DATA_DIR) / 'multicoil_train'
     # def _dataset_fn(input_context):
     #         ds = train_masked_kspace_dataset_from_indexable(
