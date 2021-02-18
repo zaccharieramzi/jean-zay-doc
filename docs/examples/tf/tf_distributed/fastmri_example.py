@@ -67,7 +67,7 @@ def train_dense_model(batch_size):
     with mirrored_strategy.scope():
         model = XPDNet(model_fun, model_kwargs, **run_params)
 
-        model.compile(loss='mse', optimizer=keras.optimizers.RMSprop())
+        model.compile(loss='mse', optimizer='adam')
 
     # training and inference
     x_train = (
