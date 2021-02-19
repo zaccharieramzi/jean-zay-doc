@@ -6,11 +6,11 @@
 #SBATCH --cpus-per-task=40          # since nodes have 40 cpus
 #SBATCH --hint=nomultithread         # we get physical cores not logical
 #SBATCH --distribution=block:block  # distribution, might be better to have contiguous blocks
-#SBATCH --time=02:00:00             # job length
+#SBATCH --time=03:00:00             # job length
 #SBATCH --output=fastmri_tf_distr_log_%j.out  # std out
 #SBATCH --error=fastmri_tf_distr_log_%j.out   # std err
 #SBATCH --exclusive                 # we reserve the entire node for our job
-#SBATCH --qos=qos_gpu-dev         # we are submitting a test job
+#SBATCH --qos=qos_gpu-t3         # we are submitting a test job
 
 
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
