@@ -30,6 +30,7 @@ def train_dense_model(batch_size):
     from fastmri_recon.data.datasets.multicoil.fastmri_pyfunc import train_masked_kspace_dataset_from_indexable
     from fastmri_recon.models.subclassed_models.denoisers.proposed_params import get_model_specs
     from fastmri_recon.models.subclassed_models.xpdnet import XPDNet
+    from fastmri_recon.models.training.compile import default_model_compile
     from fastmri_recon.models.utils.fourier import IFFT
     from fastmri_recon.models.utils.fastmri_format import general_fastmri_format
     # model building
@@ -66,8 +67,7 @@ def train_dense_model(batch_size):
 
     with mirrored_strategy.scope():
         model = XPDNet(model_fun, model_kwargs, **run_params)
-
-        model.compile(loss='mse', optimizer='adam')
+        default_model_compile(model, loss='compound_mssim', lr=1e-4)
 
     # training and inference
     # x_train = (
@@ -94,16 +94,16 @@ def train_dense_model(batch_size):
             ds = ds.with_options(options)
             return ds
     ds = mirrored_strategy.distribute_datasets_from_function(_dataset_fn)
-    if slurm_resolver.task_id == 0:
-        chkpt_path = f'{CHECKPOINTS_DIR}test_checkpoints/test' + '-{epoch:02d}.h5'
-    else:
-        chkpt_path = f'{TMP_DIR}test_checkpoints/test' + '-{epoch:02d}.h5'
-    chkpt_cback = ModelCheckpointWorkAround(
-        chkpt_path,
-        save_freq=100,
-        save_weights_only=True,
-    )
-    history = model.fit(ds, steps_per_epoch=5, epochs=2, callbacks=[chkpt_cback])
+    # if slurm_resolver.task_id == 0:
+    #     chkpt_path = f'{CHECKPOINTS_DIR}test_checkpoints/test' + '-{epoch:02d}.h5'
+    # else:
+    #     chkpt_path = f'{TMP_DIR}test_checkpoints/test' + '-{epoch:02d}.h5'
+    # chkpt_cback = ModelCheckpointWorkAround(
+    #     chkpt_path,
+    #     save_freq=100,
+    #     save_weights_only=True,
+    # )
+    history = model.fit(ds, steps_per_epoch=10, epochs=2, callbacks=[])
     return True
 
 if __name__ == '__main__':
