@@ -67,7 +67,8 @@ def train_dense_model(batch_size):
 
     with mirrored_strategy.scope():
         model = XPDNet(model_fun, model_kwargs, **run_params)
-        default_model_compile(model, loss='compound_mssim', lr=1e-4)
+        # default_model_compile(model, loss='compound_mssim', lr=1e-4)
+        print('Classical compilation')
         model.compile(optimizer='adam', loss='mse')
 
     # training and inference
