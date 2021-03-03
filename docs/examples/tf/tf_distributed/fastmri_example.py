@@ -12,7 +12,7 @@ class ModelCheckpointWorkAround(ModelCheckpoint):
 
 
 @click.command()
-@click.option('-b', 'batch_size')
+@click.option('-b', 'batch_size', type=int, default=16)
 def train_dense_model_click(batch_size):
     return train_dense_model(batch_size=batch_size)
 
