@@ -11,6 +11,7 @@
 #SBATCH --error=fastmri_tf_distr_log_%j.out   # std err
 #SBATCH --exclusive                 # we reserve the entire node for our job
 #SBATCH --qos=qos_gpu-t3         # we are submitting a test job
+#SBATCH -C v100-32g
 
 
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
