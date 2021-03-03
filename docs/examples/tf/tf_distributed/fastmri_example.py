@@ -12,8 +12,9 @@ class ModelCheckpointWorkAround(ModelCheckpoint):
 
 
 @click.command()
-def train_dense_model_click():
-    return train_dense_model(batch_size=16)
+@click.option('-b', 'batch_size')
+def train_dense_model_click(batch_size):
+    return train_dense_model(batch_size=batch_size)
 
 
 def train_dense_model(batch_size):
@@ -85,7 +86,7 @@ def train_dense_model(batch_size):
                 inner_slices=None,
                 rand=True,
                 scale_factor=1e6,
-                batch_size=16 // input_context.num_replicas_in_sync,
+                batch_size=batch_size // input_context.num_replicas_in_sync,
                 target_image_size=(640, 400),
                 parallel=False,
             )
