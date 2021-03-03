@@ -26,4 +26,4 @@ export CHECKPOINTS_DIR=$SCRATCH/
 export TMP_DIR=$JOBSCRATCH/
 export SINGLECOIL_TRAIN_DIR=singlecoil_train/singlecoil_train
 
-srun python ./fastmri_example.py
+srun python ./fastmri_example.py -b 8
